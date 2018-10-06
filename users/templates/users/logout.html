@@ -1,0 +1,9 @@
+{% extends "financeiro/home.html" %}
+{% block content %}
+    <h2>Você foi desconectado!</h2>
+    <div class="border-top pt-3">
+        <smal>
+            <button class="btn btn-outline-info" href="{% url 'login' %}">Login</button>
+        </smal>
+    </div>
+{% endblock content %}

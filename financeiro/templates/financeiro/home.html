@@ -26,13 +26,12 @@
                               Cadastros
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                              <a class="dropdown-item" href="{% url 'financeiro-cliente' %}">Clientes</a>
-                              <a class="dropdown-item" href="#">Empresas</a>
-                              <a class="dropdown-item" href="#">Fornecedores</a>
-                              <a class="dropdown-item" href="#">Formas de Pagamento</a>
-                              <a class="dropdown-item" href="#">Plano de Contas</a>
-                              <a class="dropdown-item" href="#">Contas Bancárias</a>
-                              <a class="dropdown-item" href="#">Usuário</a>
+                              <a class="dropdown-item" href="{% url 'clientes-create' %}">Clientes</a>
+                              <a class="dropdown-item" href="{% url 'empresas-create' %}">Empresas</a>
+                              <a class="dropdown-item" href="{% url 'fornecedores-create' %}">Fornecedores</a>
+                              <a class="dropdown-item" href="{% url 'formapagamentos-create' %}">Formas de Pagamento</a>
+                              <a class="dropdown-item" href="{% url 'planocontas-create' %}">Plano de Contas</a>
+                              <a class="dropdown-item" href="{% url 'contasbancarias-create' %}">Contas Bancárias</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -40,12 +39,12 @@
                               Movimentos
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                  <a class="dropdown-item" href="#">Contas a Receber - Lançamentos</a>
-                                  <a class="dropdown-item" href="#">Contas a Receber - Baixas</a>
-                                  <a class="dropdown-item" href="#">Contas a Pagar - Lançamentos</a>
-                                  <a class="dropdown-item" href="#">Contas a Pagar - Baixas</a>
-                                  <a class="dropdown-item" href="#">Tesouraria - Movimentos</a>
-                                  <a class="dropdown-item" href="#">Tesouraria - Fluxos de Caixa</a>
+                                  <a class="dropdown-item" href="{% url 'lancamentosreceber-create' %}">Contas a Receber - Lançamentos</a>
+                                  <a class="dropdown-item" href="{% url 'baixasreceber-create' %}">Contas a Receber - Baixas</a>
+                                  <a class="dropdown-item" href="{% url 'lancamentospagar-create' %}">Contas a Pagar - Lançamentos</a>
+                                  <a class="dropdown-item" href="{% url 'baixaspagar-create' %}">Contas a Pagar - Baixas</a>
+                                  <a class="dropdown-item" href="{% url 'tesouraria-create' %}">Tesouraria - Movimentos</a>
+                                  <a class="dropdown-item" href="{% url 'tesouraria-create' %}">Tesouraria - Fluxos de Caixa</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -65,8 +64,13 @@
               </div>
                 <!-- Navbar Right Side -->
                 <div class="navbar-nav">
-                    <a class="nav-item nav-link" href="#">Login</a>
-                    <a class="nav-item nav-link" href="#">Register</a>
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'profile' %}">{{ user.username }},</a>
+                        <a class="nav-item nav-link" href="{% url 'logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{% url 'login' %}">Login</a>
+                        <a class="nav-item nav-link" href=" {% url 'register' %}">Register</a>
+                    {% endif %}
                 </div>
             </div>
         </div>

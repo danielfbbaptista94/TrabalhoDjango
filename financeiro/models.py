@@ -1,10 +1,11 @@
 from django.db import models
 from multiselectfield import MultiSelectField
 from datetime import date
+from django.urls import reverse
 
 
 class Clientes(models.Model):
-    razaSocial = models.CharField(max_length=50)
+    razaoSocial = models.CharField(max_length=50)
     identificacao = models.CharField(max_length=50)
     classificacao = models.CharField(max_length=50)
     tipoPessoa = models.CharField(max_length=10)
@@ -22,12 +23,18 @@ class Clientes(models.Model):
     cpf = models.CharField(max_length=15)
     funcao = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.razaoSocial
+
     class Meta:
         verbose_name_plural = "Clientes"
 
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
+
 
 class Empresas(models.Model):
-    razaSocial = models.CharField(max_length=50)
+    razaoSocial = models.CharField(max_length=50)
     identificacao = models.CharField(max_length=50)
     tipoPessoa = models.CharField(max_length=10)
     cnpj = models.CharField(max_length=15)
@@ -44,12 +51,18 @@ class Empresas(models.Model):
     cpf = models.CharField(max_length=15)
     funcao = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.razaoSocial
+
     class Meta:
         verbose_name_plural = 'Empresas'
 
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
+
 
 class Fornecedores(models.Model):
-    razaSocial = models.CharField(max_length=50)
+    razaoSocial = models.CharField(max_length=50)
     identificacao = models.CharField(max_length=50)
     classificacao = models.CharField(max_length=50)
     tipoPessoa = models.CharField(max_length=10)
@@ -67,8 +80,14 @@ class Fornecedores(models.Model):
     cpf = models.CharField(max_length=15)
     funcao = models.CharField(max_length=50)
 
+    def __str__(self):
+        return self.razaoSocial
+
     class Meta:
        verbose_name_plural = 'Fornecedores'
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
 
 
 class FormaPagamentos(models.Model):
@@ -79,6 +98,9 @@ class FormaPagamentos(models.Model):
 
     class Meta:
         verbose_name_plural = 'Formas de Pagamentos'
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
 
 
 class ContasBancarias(models.Model):
@@ -98,6 +120,9 @@ class ContasBancarias(models.Model):
     class Meta:
         verbose_name_plural = "Contas Bancarias"
 
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
+
 
 class PlanoContas(models.Model):
     caractList = (('Caixa', 'Caixa'),
@@ -114,8 +139,14 @@ class PlanoContas(models.Model):
     tipo = models.CharField(max_length=15)
     caracteristica = MultiSelectField(choices=caractList)
 
+    def __str__(self):
+        return self.descricao
+
     class Meta:
         verbose_name_plural = "Plano de Contas"
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
 
 
 class LancamentosReceber(models.Model):
@@ -129,20 +160,11 @@ class LancamentosReceber(models.Model):
     def __str__(self):
         return self.empresa
 
-
-class LancamentosReceber(models.Model):
-    Clientes = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-    Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
-    dataVencimento = models.DateField(default=date.today)
-    datEmissao = models.DateField(default=date.today)
-    valorTitulo = models.FloatField(max_length=5)
-    numeroDocumento = models.IntegerField()
-
-    def __str__(self):
-        return self.descricao
-
     class Meta:
         verbose_name_plural = "Lancamentos a Receber"
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
 
 
 class BaixasReceber(models.Model):
@@ -156,23 +178,32 @@ class BaixasReceber(models.Model):
     valorRecebido = models.FloatField(max_length=5)
     valorResidual = models.FloatField(max_length=5)
 
+    def __str__(self):
+        return self.empresa
+
     class Meta:
         verbose_name_plural = "Baixa de Conta a Receber"
 
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
+
 
 class LancamentosPagar(models.Model):
-    fk_Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
-    fk_Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
+    Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
+    Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
     dataVencimento = models.DateField(default=date.today)
     datEmissao = models.DateField(default=date.today)
     valorTitulo = models.FloatField(max_length=5)
     numeroDocumento = models.IntegerField()
 
     def __str__(self):
-        return self.descricao
+        return self.Empresas
 
     class Meta:
         verbose_name_plural = "Lancamentos a Pagar"
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
 
 
 class BaixasPagar(models.Model):
@@ -186,21 +217,33 @@ class BaixasPagar(models.Model):
     valorRecebido = models.FloatField(max_length=5)
     valorResidual = models.FloatField(max_length=5)
 
+    def __str__(self):
+        return self.empresa
+
     class Meta:
         verbose_name_plural = "Baixa de Conta a Pagar"
 
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})
+
 
 class Tesouraria(models.Model):
-    fk_Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
-    fk_Clientes = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-    fk_PlanoContas = models.ForeignKey(PlanoContas, on_delete=models.CASCADE)
-    fk_FormaPagamentos = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
-    fk_Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
+    Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
+    Clientes = models.ForeignKey(Clientes, on_delete=models.CASCADE)
+    PlanoContas = models.ForeignKey(PlanoContas, on_delete=models.CASCADE)
+    FormaPagamentos = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
+    Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
     valor = models.FloatField(max_length=5)
     numero = models.IntegerField()
     datEmissao = models.DateField(default=date.today)
     dataVencimento = models.DateField(default=date.today)
     dataDisponibilidade = models.DateField(default=date.today)
 
+    def __str__(self):
+        return self.Empresas
+
     class Meta:
         verbose_name_plural = "Tesouraria"
+
+    def get_absolute_url(self):
+        return reverse('financeiro-home', kwargs={'pk': self.pk})

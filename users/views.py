@@ -9,8 +9,12 @@ def register(request):
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
-            messages.success(request, f'Conta criada para o {username}!')
-            return redirect('financeiro-home')
+            messages.success(request, f'Sua conta foi criada com sucesso!')
+            return redirect('login')
     else:
         form = UserRegisterForm()
     return render(request, 'users/register.html', {'form': form})
+
+
+def profile(request):
+    return render(request, 'users/profile.html')

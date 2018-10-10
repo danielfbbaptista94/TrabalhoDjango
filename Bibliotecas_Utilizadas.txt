@@ -1,0 +1,3 @@
+pip install django-crispy-forms
+pip install django-multiselectfield
+pip install django_tables2

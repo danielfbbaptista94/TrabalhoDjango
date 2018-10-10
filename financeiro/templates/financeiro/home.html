@@ -44,7 +44,6 @@
                                   <a class="dropdown-item" href="{% url 'lancamentospagar-create' %}">Contas a Pagar - Lançamentos</a>
                                   <a class="dropdown-item" href="{% url 'baixaspagar-create' %}">Contas a Pagar - Baixas</a>
                                   <a class="dropdown-item" href="{% url 'tesouraria-create' %}">Tesouraria - Movimentos</a>
-                                  <a class="dropdown-item" href="{% url 'tesouraria-create' %}">Tesouraria - Fluxos de Caixa</a>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
@@ -52,12 +51,11 @@
                               Relatórios
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                  <a class="dropdown-item" href="#">Contas a Receber - Lançamentos</a>
-                                  <a class="dropdown-item" href="#">Contas a Receber - Baixas</a>
-                                  <a class="dropdown-item" href="#">Contas a Pagar - Lançamentos</a>
-                                  <a class="dropdown-item" href="#">Contas a Pagar - Baixas</a>
-                                  <a class="dropdown-item" href="#">Tesouraria - Movimentos</a>
-                                  <a class="dropdown-item" href="#">Tesouraria - Fluxos de Caixa</a>
+                                  <a class="dropdown-item" href="{% url 'lancamentosreceber-details' %}">Contas a Receber - Lançamentos</a>
+                                  <a class="dropdown-item" href="{% url 'baixasreceber-details' %}">Contas a Receber - Baixas</a>
+                                  <a class="dropdown-item" href="{% url 'lancamentospagar-details' %}">Contas a Pagar - Lançamentos</a>
+                                  <a class="dropdown-item" href="{% url 'baixaspagar-details' %}">Contas a Pagar - Baixas</a>
+                                  <a class="dropdown-item" href="{% url 'tesouraria-details' %}">Tesouraria - Movimentos</a>
                             </div>
                         </li>
                     </ul>

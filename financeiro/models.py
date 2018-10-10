@@ -1,6 +1,6 @@
 from django.db import models
 from multiselectfield import MultiSelectField
-from datetime import date
+from datetime import datetime
 from django.urls import reverse
 
 
@@ -110,7 +110,7 @@ class ContasBancarias(models.Model):
     descricao = models.CharField(max_length=50)
     numeroConta = models.CharField(max_length=20)
     numeroAgencia = models.CharField(max_length=20)
-    dataSaldoInicial = models.DateField(default=date.today)
+    dataSaldoInicial = models.DateField(default=datetime.now())
     saldoInicial = models.CharField(max_length=14)
     tipo = MultiSelectField(choices=contasList, max_choices=1)
 
@@ -152,8 +152,8 @@ class PlanoContas(models.Model):
 class LancamentosReceber(models.Model):
     cliente = models.ForeignKey(Clientes, on_delete=models.CASCADE)
     empresa = models.ForeignKey(Empresas, on_delete=models.CASCADE)
-    dataVencimento = models.DateField(default=date.today)
-    dataEmissao = models.DateField(default=date.today)
+    dataVencimento = models.DateField(default=datetime.now())
+    dataEmissao = models.DateField(default=datetime.now())
     numeroDocumento = models.CharField(max_length=5)
     valorTitulo = models.FloatField(max_length=5)
 
@@ -169,11 +169,11 @@ class LancamentosReceber(models.Model):
 
 class BaixasReceber(models.Model):
     empresa = models.ForeignKey(LancamentosReceber, on_delete=models.CASCADE)
-    caixaBanco = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
-#   banco
-    vencimentoPagamento = models.DateField(default=date.today)
-    disponibilidade = models.DateField(default=date.today)
-    dataBaixa = models.DateField(default=date.today)
+    FormaPagamento = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
+    CaixaBanco = models.ForeignKey(PlanoContas, on_delete=models.CASCADE, null=True)
+    vencimentoPagamento = models.DateField(default=datetime.now())
+    disponibilidade = models.DateField(default=datetime.now())
+    dataBaixa = models.DateField(default=datetime.now())
     numeroDocumento = models.CharField(max_length=5)
     valorRecebido = models.FloatField(max_length=5)
     valorResidual = models.FloatField(max_length=5)
@@ -190,11 +190,11 @@ class BaixasReceber(models.Model):
 
 class LancamentosPagar(models.Model):
     Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
-    Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
-    dataVencimento = models.DateField(default=date.today)
-    datEmissao = models.DateField(default=date.today)
+    empresa = models.ForeignKey(Empresas, on_delete=models.CASCADE)
+    dataVencimento = models.DateField(default=datetime.now())
+    dataEmissao = models.DateField(default=datetime.now())
+    numeroDocumento = models.CharField(max_length=5)
     valorTitulo = models.FloatField(max_length=5)
-    numeroDocumento = models.IntegerField()
 
     def __str__(self):
         return self.Empresas
@@ -207,18 +207,18 @@ class LancamentosPagar(models.Model):
 
 
 class BaixasPagar(models.Model):
-    empresa = models.ForeignKey(LancamentosPagar, on_delete=models.CASCADE)
-    caixaBanco = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
-#   banco
-    vencimentoPagamento = models.DateField(default=date.today)
-    disponibilidade = models.DateField(default=date.today)
-    dataBaixa = models.DateField(default=date.today)
-    numeroDocumento = models.CharField(max_length=5)
-    valorRecebido = models.FloatField(max_length=5)
-    valorResidual = models.FloatField(max_length=5)
+    Empresa = models.ForeignKey(LancamentosPagar, on_delete=models.CASCADE)
+    FormaPagamento = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
+    CaixaBanco = models.ForeignKey(PlanoContas, on_delete=models.CASCADE, null=True)
+    VencimentoPagamento = models.DateField(default=datetime.now())
+    Disponibilidade = models.DateField(default=datetime.now())
+    DataBaixa = models.DateField(default=datetime.now())
+    NumeroDocumento = models.CharField(max_length=5)
+    ValorRecebido = models.FloatField(max_length=5)
+    ValorResidual = models.FloatField(max_length=5)
 
     def __str__(self):
-        return self.empresa
+        return self.Empresa
 
     class Meta:
         verbose_name_plural = "Baixa de Conta a Pagar"
@@ -230,14 +230,15 @@ class BaixasPagar(models.Model):
 class Tesouraria(models.Model):
     Empresas = models.ForeignKey(Empresas, on_delete=models.CASCADE)
     Clientes = models.ForeignKey(Clientes, on_delete=models.CASCADE)
-    PlanoContas = models.ForeignKey(PlanoContas, on_delete=models.CASCADE)
-    FormaPagamentos = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
     Fornecedores = models.ForeignKey(Fornecedores, on_delete=models.CASCADE)
+    Entrada = models.ForeignKey(PlanoContas, related_name='conta_entrada', on_delete=models.CASCADE, null=True)
+    Saida = models.ForeignKey(PlanoContas, related_name='conta_saida', on_delete=models.CASCADE, null=True)
+    FormaPagamentos = models.ForeignKey(FormaPagamentos, on_delete=models.CASCADE)
     valor = models.FloatField(max_length=5)
     numero = models.IntegerField()
-    datEmissao = models.DateField(default=date.today)
-    dataVencimento = models.DateField(default=date.today)
-    dataDisponibilidade = models.DateField(default=date.today)
+    dataEmissao = models.DateField(default=datetime.now())
+    dataVencimento = models.DateField(default=datetime.now())
+    dataDisponibilidade = models.DateField(default=datetime.now())
 
     def __str__(self):
         return self.Empresas
